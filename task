@@ -1,0 +1,58 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+def quadratic_model(x, a, b, c):
+    return a * x**2 + b * x + c
+
+def generate_weather_data(start, end, num_points, a, b, c, noise_factor=10):
+    x = np.linspace(start, end, num_points)
+    y = quadratic_model(x, a, b, c) + np.random.normal(0, noise_factor, num_points)
+    return x, y
+
+def plot_weather_data(x, y, title, filename=None):
+    plt.scatter(x, y, label='Weather Data')
+    plt.title(title)
+    plt.xlabel('Time')
+    plt.ylabel('Temperature')
+    plt.legend()
+    if filename:
+        plt.savefig(filename)
+    else:
+        plt.show()
+    plt.close()
+
+# Initial parameters for the quadratic model
+a_agile = 0.5
+b_agile = -5
+c_agile = 20
+
+# Generate initial weather data
+start_time = 0
+end_time = 10
+num_points = 100
+x_data, y_agile = generate_weather_data(start_time, end_time, num_points, a_agile, b_agile, c_agile)
+
+# Initial plot
+plot_weather_data(x_data, y_agile, 'Agile Model: Initial Weather Data', 'initial_weather_data.png')
+
+# Agile development
+num_sprints = 3  # Adjust as needed
+
+for sprint in range(1, num_sprints + 1):
+    # Gather feedback and adjust model parameters
+    print(f"\nSprint {sprint}: Gather feedback and refine the model.")
+    a_agile += float(input("Enter incremental change for 'a': "))
+    b_agile += float(input("Enter incremental change for 'b': "))
+    c_agile += float(input("Enter incremental change for 'c': "))
+
+    # Generate updated weather data
+    y_agile = quadratic_model(x_data, a_agile, b_agile, c_agile)
+
+    # Plot updated weather data
+    plot_weather_data(x_data, y_agile, f'Agile Model: Sprint {sprint} Weather Data', f'sprint_{sprint}_weather_data.png')
+
+# Final plot with the last Agile parameters
+plot_weather_data(x_data, y_agile, 'Agile Model: Final Weather Data', 'final_weather_data.png')
+
+final_temperature_agile = y_agile[-1]
+print(f"\nFinal Temperature for Agile Model: {final_temperature_agile}")
